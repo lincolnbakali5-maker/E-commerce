@@ -1,0 +1,64 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<section class="section-header">
+    <h1>Your Cart</h1>
+    <p>Review your selections and update quantities before checkout.</p>
+</section>
+
+{% if items %}
+<div class="cart-intro">
+    <p>You currently have {{ items|length }} item{{ items|length|pluralize }} in your cart.</p>
+    <p>Update quantities and click "Update Cart" to save changes. Set a quantity to 0 to remove an item.</p>
+</div>
+
+<form method="POST" class="cart-table">
+    {% csrf_token %}
+    <div class="cart-grid header">
+        <span>Product</span>
+        <span>Price</span>
+        <span>Quantity</span>
+        <span>Total</span>
+    </div>
+    {% for item in items %}
+        <div class="cart-grid row">
+            <div>
+                <strong>{{ item.product.name }}</strong>
+                <p>{{ item.product.description }}</p>
+            </div>
+            <div>{{ item.product.formatted_price }}</div>
+            <div><input class="quantity-input" type="number" name="quantity_{{ item.product.id }}" value="{{ item.quantity }}" min="0"></div>
+            <div>${{ item.line_total|floatformat:2 }}</div>
+        </div>
+    {% endfor %}
+    <div class="cart-summary">
+        <button type="submit" class="button">Update Cart</button>
+        <div>
+            <p><strong>Order total:</strong></p>
+            <p class="order-total">${{ total|floatformat:2 }}</p>
+        </div>
+    </div>
+</form>
+
+<section class="checkout-form">
+    <h2>Checkout</h2>
+    <p>Enter your name and email to complete the order. After checkout, your cart will be cleared.</p>
+    <form method="POST" action="{% url 'store:checkout' %}">
+        {% csrf_token %}
+        <label>
+            Full name
+            <input type="text" name="name" required>
+        </label>
+        <label>
+            Email address
+            <input type="email" name="email" required>
+        </label>
+        <button type="submit" class="button">Place Order</button>
+    </form>
+</section>
+{% else %}
+    <div class="empty-cart">
+        <p>Your cart is empty. Browse our <a href="{% url 'store:product_list' %}">products</a> to add a new hat.</p>
+    </div>
+{% endif %}
+{% endblock %}

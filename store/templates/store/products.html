@@ -1,0 +1,33 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<section class="section-header">
+    <h1>All Hats</h1>
+    <p>Browse our full hat collection and choose the perfect style.</p>
+</section>
+
+{% if products %}
+    <div class="product-grid">
+        {% for product in products %}
+            <article class="product-card">
+                <div class="product-image" style="background-image: url('{{ product.image_url }}');"></div>
+                <div class="product-copy">
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description }}</p>
+                    <div class="product-footer">
+                        <span class="price">{{ product.formatted_price }}</span>
+                        <a class="button button-small" href="{% url 'store:product_detail' product.slug %}">View</a>
+                        <form method="POST" action="{% url 'store:add_to_cart' product.id %}" class="inline-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="button button-small">Add to Cart</button>
+                        </form>
+                    </div>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>There are no products available right now. Please check back later.</p>
+{% endif %}
+{% endblock %}

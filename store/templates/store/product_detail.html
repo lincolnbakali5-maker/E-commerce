@@ -1,0 +1,25 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<section class="section-header">
+    <h1>{{ product.name }}</h1>
+    <p>{{ product.description }}</p>
+</section>
+
+<div class="detail-grid">
+    <div class="detail-image-large" style="background-image: url('{{ product.image_url }}');"></div>
+    <div class="detail-copy">
+        <span class="price-large">{{ product.formatted_price }}</span>
+        <p>{{ product.description }}</p>
+        <form method="POST" action="{% url 'store:add_to_cart' product.id %}">
+            {% csrf_token %}
+            <label>
+                Quantity
+                <input type="number" name="quantity" value="1" min="1">
+            </label>
+            <button type="submit" class="button">Add to Cart</button>
+        </form>
+        <a class="button button-ghost" href="{% url 'store:product_list' %}">Back to products</a>
+    </div>
+</div>
+{% endblock %}

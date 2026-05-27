@@ -1,0 +1,14 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<section class="section-header">
+    <h1>Order Confirmed</h1>
+    <p>Thank you, {{ customer_name }}. Your order has been placed successfully.</p>
+</section>
+
+<div class="order-complete-card">
+    <p><strong>Order amount:</strong> ${{ total|floatformat:2 }}</p>
+    <p>We have sent a confirmation email. You can continue shopping below.</p>
+    <a class="button" href="{% url 'store:product_list' %}">Continue Shopping</a>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<section class="hero">
+    <div>
+        <span class="eyebrow">Handpicked collection</span>
+        <h1>Welcome to Lincoln Hat Store</h1>
+        <p>Discover stylish hats built for comfort, quality, and everyday wear.</p>
+        <a class="button" href="{% url 'store:product_list' %}">Shop All Products</a>
+    </div>
+    <div class="hero-image"></div>
+</section>
+
+<section class="featured">
+    <div class="section-header">
+        <h2>Featured hats</h2>
+        <p>Our most popular hats, selected for style and comfort.</p>
+    </div>
+    <div class="product-grid">
+        {% for product in featured_products %}
+            <article class="product-card">
+                <div class="product-image" style="background-image: url('{{ product.image_url }}');"></div>
+                <div class="product-copy">
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description }}</p>
+                    <div class="product-footer">
+                        <span class="price">{{ product.formatted_price }}</span>
+                        <a class="button button-small" href="{% url 'store:product_detail' product.slug %}">View</a>
+                    </div>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
